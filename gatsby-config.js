@@ -1,14 +1,18 @@
 module.exports = {
   siteMetadata: {
-    title: `Forska`,
-    siteUrl: `https://www.yourdomain.tld`
+    title: `Forska Blog`,
+    siteUrl: `https://gatsbyforskamain.gatsbyjs.io/`
   },
-  plugins: ["gatsby-plugin-mdx", "gatsby-transformer-remark", {
-    resolve: 'gatsby-source-filesystem',
-    options: {
-      "name": "pages",
-      "path": "./src/pages/"
+  plugins: [
+    "gatsby-plugin-image",
+    "gatsby-plugin-sharp",
+    {
+      resolve: "gatsby-source-filesystem",
+      options: {
+        name: `blog`,
+        path: `${__dirname}/blog`,
+      }
     },
-    __key: "pages"
-  }]
+    "gatsby-plugin-mdx",
+  ]
 };
