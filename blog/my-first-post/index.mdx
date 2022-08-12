@@ -1,13 +1,13 @@
 ---
-title: "My First Post"
+title: "MySQL 主从复制(Master-Slave)实践"
 date: "2021-07-23"
+tag: "docker,mysql"
+introduction: "本次示例使用docker创建2个mysql服务，并配置主从复制(Master-Slave)实现"
 image_path: "./susan-wilkinson-Gkx9y1KU_00-unsplash.jpg"
 image_alt: "A gray pitbull relaxing on the sidewalk with its tongue hanging out"
 image_credit_text: "Susan Wilkinson"
 image_credit_link: "https://unsplash.com/photos/Gkx9y1KU_00/download?ixid=MnwxMjA3fDB8MXxhbGx8M3x8fHx8fDJ8fDE2NjAwMjg0MTk&force=true&w=1920"
 ---
-
-### MySQL 主从复制(Master-Slave)实践
 
 #### 实现 MySQL 主从复制需要进行的配置
 
@@ -30,13 +30,13 @@ image_credit_link: "https://unsplash.com/photos/Gkx9y1KU_00/download?ixid=MnwxMj
 
 - 主数据库端口 `33070`
 - 从数据库端口 `33080`
-- 用作测试的表：ybx
+- 用作测试的表 `ybx`
 
 #### 主数据库设置
 
-1. 修改 mysql 配置文件 my.cnf 并重启容器
+1. 修改 mysql 配置文件 `my.cnf` 并重启容器
 
-```
+```mysql
 # For advice on how to change settings please see
 # http://dev.mysql.com/doc/refman/5.7/en/server-configuration-defaults.html
 
@@ -89,26 +89,29 @@ binlog-ignore-db=mysql
 
 2. 进入容器并连接 mysql
 
-```
+```shell
 $ docker exec -it mysql33070 bash
+
+$ mysql -uroot -proot
 ```
 
-/# mysql -uroot -proot
+```mysql
 
 #设置权限
 mysql> GRANT REPLICATION SLAVE,FILE,REPLICATION CLIENT ON _._ TO 'repluser'@'%' IDENTIFIED BY '123456';
 
 #刷新权限
-FLUSH PRIVILEGES; #查询 master 状态
+mysql> FLUSH PRIVILEGES;
 
-mysql > SHOW MASTER STATUS;
+#查询 master 状态
+mysql> SHOW MASTER STATUS;
 
-```
 +------------------+----------+--------------+------------------+
-| File | Position | Binlog_Do_DB | Binlog_Ignore_DB |
+| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB |
 +------------------+----------+--------------+------------------+
-| mysql-bin.000001 | 159 | ybx | mysql |
+| mysql-bin.000001 | 159      | ybx          | mysql            |
 +------------------+----------+--------------+------------------+
+
 ```
 
 #### 从数据库修改
@@ -197,7 +200,9 @@ mysql> start slave;
 
 ##### 查看 slave 的状态 \G 是格式化的意思
 
-mysql> show slave status\G; \***\*\*\*\*\*\*\***\*\*\*\***\*\*\*\*\*\*\*** 1. row \***\*\*\*\*\*\*\***\*\*\*\***\*\*\*\*\*\*\***
+```
+mysql> show slave status\G;
+\***\*\*\*\*\*\*\***\*\*\*\***\*\*\*\*\*\*\*** 1. row \***\*\*\*\*\*\*\***\*\*\*\***\*\*\*\*\*\*\***
 Slave_IO_State: Waiting for master to send event
 Master_Host: 182.92.172.80
 Master_User: rep1
@@ -213,7 +218,13 @@ Slave_SQL_Running: Yes
 Replicate_Do_DB:
 Replicate_Ignore_DB:
 ...
+```
 
-当 Slave_IO_Running 和 Slave_SQL_Running 都为 YES 的时候就表示主从同步设置成功了。接下来就可以进行一些验证了，比如在主 master 数据库的 ybx 数据库的一张表中插入一条数据，在 slave 的 ybx 库的相同数据表中查看是否有新增的数据即可验证主从复制功能是否有效，还可以关闭 slave（mysql>stop slave;）,然后再修改 master，看 slave 是否也相应修改（停止 slave 后，master 的修改不会同步到 slave），就可以完成主从复制功能的验证了。
+- 当 Slave_IO_Running 和 Slave_SQL_Running 都为 YES 的时候就表示主从同步设置成功了。
+- 接下来就可以进行一些验证了
+- 比如在主 master 数据库的 ybx 数据库的一张表中插入一条数据
+- 在 slave 的 ybx 库的相同数据表中查看是否有新增的数据即可验证主从复制功能是否有效.
+- 还可以关闭 slave（mysql>stop slave;）,然后再修改 master,
+- 看 slave 是否也相应修改（停止 slave 后，master 的修改不会同步到 slave），就可以完成主从复制功能的验证了。
 
 [TOC]

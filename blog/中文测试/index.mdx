@@ -1,0 +1,108 @@
+---
+title: "代码块测试"
+date: "2021-07-23"
+tag: "docker,mysql"
+introduction: "本次示例使用docker创建2个mysql服务，并配置主从复制(Master-Slave)实现"
+image_path: "./susan-wilkinson-Gkx9y1KU_00-unsplash.jpg"
+image_alt: "A gray pitbull relaxing on the sidewalk with its tongue hanging out"
+image_credit_text: "Susan Wilkinson"
+image_credit_link: "https://unsplash.com/photos/Gkx9y1KU_00/download?ixid=MnwxMjA3fDB8MXxhbGx8M3x8fHx8fDJ8fDE2NjAwMjg0MTk&force=true&w=1920"
+---
+
+## Frequently Asked Questions
+
+### Why Gatsby?
+
+---
+
+> blockquote
+>
+> > nested blockquote
+>
+> > **I'm bold!**
+>
+> more quotes
+
+You can use Markdown to create documents for [Gatsby](https://www.gatsbyjs.com/).
+
+Gatsby delivers faster, more secure sites and apps from a variety of data
+sources
+
+### 代码块演示
+
+---
+
+json
+
+```json{numberLines: true}
+{
+  "firstName": "John",
+  "lastName": "Smith",
+  "age": 25
+}
+```
+
+---
+
+css
+
+```css{numberLines: 5}
+.scrollbar::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #404040;
+  border-radius: 1rem;
+}
+.scrollbar::-webkit-scrollbar-track {
+  background: #0000;
+}
+```
+
+---
+
+javascript
+
+```javascript
+console.log("javascript");
+console.log("forska");
+```
+
+---
+
+diff
+
+```diff
+// In your gatsby-config.js
+plugins: [
+  {
+-    resolve: `gatsby-transformer-remark`,
++    resolve: `gatsby-transformer-remark2`,
+    options: {
+      plugins: [`gatsby-remark-prismjs`],
+    },
+  },
+];
+
+console.log(123);
+```
+
+---
+
+php 高亮行
+
+```php{1,4-6}
+class Cart extends Controller {
+    public function index()
+    {
+        return json(['code' => 0,'msg' => 'ok']);
+    }
+
+    public function read($id)
+    {
+        echo $id;
+    }
+}
+```
